@@ -17,6 +17,7 @@ inputs:
   context:
     description: A string label to differentiate this status from the status of other systems. This field is case-insensitive
     required: false
+    default: ${{ github.workflow }} / ${{ github.job }} (${{ github.event_name }})
   github_token:
     description: GitHub Access Token
     required: false
