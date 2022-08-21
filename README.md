@@ -5,24 +5,30 @@ GitHub Actions to update commit status according to job results
 ## Example
 
 ```yaml
-- uses: suzuki-shunsuke/update-commit-status-action@main
-  with:
-    repo_owner: suzuki-shunsuke
-    repo_name: tfcmt
-    sha: xxx
-    context: ${{ env.GITHUB_JOB }}
-    github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-# Other steps
-- uses: suzuki-shunsuke/update-commit-status-action@main
-  if: always()
-  with:
-    repo_owner: suzuki-shunsuke
-    repo_name: tfcmt
-    sha: xxx
-    context: ${{ env.GITHUB_JOB }}
-    state: ${{ job.status }}
-  env:
-    GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+jobs:
+  foo:
+    runs-on: ubuntu-latest
+    steps:
+      # Start pending
+      - uses: suzuki-shunsuke/update-commit-status-action@main
+        with:
+          repo_owner: suzuki-shunsuke
+          repo_name: test-github-action
+          sha: fae4b30052b48f38129f98dfc0bf3bae470eaf01
+          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - run: sleep 20
+      - run: exit 1
+
+      - uses: suzuki-shunsuke/update-commit-status-action@main
+        if: always()
+        with:
+          repo_owner: suzuki-shunsuke
+          repo_name: test-github-action
+          sha: fae4b30052b48f38129f98dfc0bf3bae470eaf01
+          state: ${{ job.status }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
 ```
 
 ## Inputs
