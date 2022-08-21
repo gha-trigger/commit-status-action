@@ -1,0 +1,26 @@
+name: update-commit-status-action
+description: Update commit status according to job results
+inputs:
+  repo_owner:
+    description: Repository Owner
+    required: true
+  repo_name:
+    description: Repository Name
+    required: true
+  sha:
+    description: Commit hash
+    required: true
+  state:
+    description: A string label to differentiate this status from the status of other systems. This field is case-insensitive
+    required: false
+    default: pending
+  context:
+    description: A string label to differentiate this status from the status of other systems. This field is case-insensitive
+    required: false
+  github_token:
+    description: GitHub Access Token
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: node16
+  main: dist/index.js
