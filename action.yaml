@@ -21,6 +21,9 @@ inputs:
     description: GitHub Access Token
     required: false
     default: ${{ github.token }}
+  target_url:
+    description: target URL
+    required: false
 runs:
   using: node16
   main: dist/index.js

@@ -37,11 +37,12 @@ GitHub Actions to update commit status according to job results
 
 ### Optional
 
-| name         | default         | description                                                                                                  |
-| ------------ | --------------- | ------------------------------------------------------------------------------------------------------------ |
-| github_token | `github.token`, | GitHub Access Token                                                                                          |
-| context      |                 | A string label to differentiate this status from the status of other systems. This field is case-insensitive |
-| state        | 'pending'       | The state of the status. Can be one of: `error`, `failure`, `pending`, `success`, `cancelled`                |
+| name         | default                                                                 | description                                                                                                  |
+| ------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| github_token | `github.token`,                                                         | GitHub Access Token                                                                                          |
+| context      |                                                                         | A string label to differentiate this status from the status of other systems. This field is case-insensitive |
+| state        | 'pending'                                                               | The state of the status. Can be one of: `error`, `failure`, `pending`, `success`, `cancelled`                |
+| target_url   | `https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}` | target url                                                                                                   |
 
 ## Environment variables
 
