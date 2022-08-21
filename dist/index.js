@@ -8407,46 +8407,46 @@ const core = __importStar(__nccwpck_require__(2900));
 const run_1 = __nccwpck_require__(2672);
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, run_1.run)({
-        repoOwner: core.getInput('repo_owner', { required: false }),
-        repoName: core.getInput('repo_name', { required: false }),
-        sha: core.getInput('sha', { required: false }),
-        context: core.getInput('context', { required: false }),
+        repoOwner: core.getInput("repo_owner", { required: false }),
+        repoName: core.getInput("repo_name", { required: false }),
+        sha: core.getInput("sha", { required: false }),
+        context: core.getInput("context", { required: false }),
         githubToken: getToken(),
-        state: getState(core.getInput('state', { required: true })),
+        state: getState(core.getInput("state", { required: true })),
         targetURL: getTargetURL(),
     });
 });
 main().catch((e) => core.setFailed(e instanceof Error ? e.message : JSON.stringify(e)));
 function getState(state) {
     switch (state) {
-        case 'error':
-        case 'failure':
-        case 'pending':
-        case 'success':
+        case "error":
+        case "failure":
+        case "pending":
+        case "success":
             return state;
-        case 'cancelled':
-            return 'failure';
+        case "cancelled":
+            return "failure";
         default:
             throw `state ${state} is invalid`;
     }
 }
 function getToken() {
-    let token = core.getInput('github_token', { required: false });
+    let token = core.getInput("github_token", { required: false });
     if (token) {
         return token;
     }
-    token = process.env.GITHUB_TOKEN || '';
+    token = process.env.GITHUB_TOKEN || "";
     if (token) {
         return token;
     }
-    throw 'GitHub Access Token is required';
+    throw "GitHub Access Token is required";
 }
 function getTargetURL() {
-    let targetURL = core.getInput('target_url', { required: false });
+    let targetURL = core.getInput("target_url", { required: false });
     if (targetURL) {
         return targetURL;
     }
-    return `https://github.com/${process.env.GITHUB_REPOSITORY || ''}/actions/runs/${process.env.GITHUB_RUN_ID || ''}`;
+    return `https://github.com/${process.env.GITHUB_REPOSITORY || ""}/actions/runs/${process.env.GITHUB_RUN_ID || ""}`;
 }
 
 
