@@ -160,7 +160,9 @@ function getStatusFromNeedsContext(
     switch (result) {
       // success, failure, cancelled, or skipped
       case "success":
+        return "success";
       case "skipped":
+        return "success";
       case "failure":
         return "failure";
       case "cancelled":

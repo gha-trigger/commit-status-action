@@ -9644,7 +9644,7 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     }
     if (envs.isWorkflow) {
         if (!inputs.updateCommitStatus) {
-            core.info('Skip updating a commit status');
+            core.info("Skip updating a commit status");
             return;
         }
         if (inputs.needs) {
@@ -9696,7 +9696,9 @@ function getStatusFromNeedsContext(needsStr) {
         switch (result) {
             // success, failure, cancelled, or skipped
             case "success":
+                return "success";
             case "skipped":
+                return "success";
             case "failure":
                 return "failure";
             case "cancelled":
