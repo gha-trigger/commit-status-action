@@ -77,13 +77,14 @@ function validateInputs(inputs: Inputs) {
   if (!inputs.repoName) {
     throw `repo_name is required`;
   }
-  if (!inputs.sha) {
-    throw `sha is required`;
-  }
 }
 
 export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
   updateInputsWithEnvs(inputs, envs);
+  if (!inputs.sha) {
+    core.info("Skip updating a commit status, because sha is empty");
+    return;
+  }
   validateInputs(inputs);
 
   const octokit = github.getOctokit(inputs.githubToken);
@@ -96,7 +97,7 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
 
   setState(inputs, envs);
   if (inputs.state == "") {
-    core.info("Skip updating a commit status");
+    core.info("Skip updating a commit status, because state is empty");
     return;
   }
 

@@ -9628,12 +9628,13 @@ function validateInputs(inputs) {
     if (!inputs.repoName) {
         throw `repo_name is required`;
     }
-    if (!inputs.sha) {
-        throw `sha is required`;
-    }
 }
 const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     updateInputsWithEnvs(inputs, envs);
+    if (!inputs.sha) {
+        core.info("Skip updating a commit status, because sha is empty");
+        return;
+    }
     validateInputs(inputs);
     const octokit = github.getOctokit(inputs.githubToken);
     if (envs.isWorkflow) {
@@ -9644,7 +9645,7 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     }
     setState(inputs, envs);
     if (inputs.state == "") {
-        core.info("Skip updating a commit status");
+        core.info("Skip updating a commit status, because state is empty");
         return;
     }
     core.info(`Updating a commit status owner=${inputs.repoOwner} repo=${inputs.repoName} sha=${inputs.sha} state=${inputs.state} context=${inputs.context} target_url=${inputs.targetURL}`);
