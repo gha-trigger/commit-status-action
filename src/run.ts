@@ -128,7 +128,7 @@ function setState(inputs: Inputs, envs: Envs) {
     return;
   }
   if (!inputs.startWorkflow) {
-    inputs.state = '';
+    inputs.state = "";
     return;
   }
   if (inputs.state == "") {
