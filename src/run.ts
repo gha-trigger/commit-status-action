@@ -30,7 +30,7 @@ export function newInputs(): Inputs {
     sha: core.getInput("sha"),
     context: core.getInput("context"),
     githubToken: core.getInput("github_token"),
-    state: getState(core.getInput("state", { required: true })),
+    state: getState(core.getInput("state")),
     needs: core.getInput("needs"),
     updateCommitStatus: core.getBooleanInput("update_commit_status"),
     targetURL: core.getInput("target_url"),

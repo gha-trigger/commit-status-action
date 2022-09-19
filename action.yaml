@@ -12,7 +12,7 @@ inputs:
     required: false
   github_token:
     description: GitHub Access Token
-    required: true
+    required: false
   target_url:
     description: target URL
     required: false
