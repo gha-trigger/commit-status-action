@@ -3,13 +3,19 @@ description: Update commit status according to job results
 inputs:
   repo_owner:
     description: Repository Owner
-    required: true
+    required: false
   repo_name:
     description: Repository Name
-    required: true
+    required: false
   sha:
     description: Commit hash
+    required: false
+  github_token:
+    description: GitHub Access Token
     required: true
+  target_url:
+    description: target URL
+    required: false
   state:
     description: A string label to differentiate this status from the status of other systems. This field is case-insensitive
     required: false
@@ -17,13 +23,11 @@ inputs:
   context:
     description: A string label to differentiate this status from the status of other systems. This field is case-insensitive
     required: false
-    default: ${{ github.workflow }} / ${{ github.job }} (${{ github.event_name }})
-  github_token:
-    description: GitHub Access Token
+  needs:
+    description: needs context.
     required: false
-    default: ${{ github.token }}
-  target_url:
-    description: target URL
+  update_commit_status:
+    description: Whether a commit status is updated
     required: false
 runs:
   using: node16

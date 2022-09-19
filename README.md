@@ -1,4 +1,4 @@
-# update-commit-status-action
+# commit-status-action
 
 GitHub Actions to update commit status according to job results
 
@@ -10,48 +10,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Start pending
-      - uses: suzuki-shunsuke/update-commit-status-action@main
+      - uses: gha-trigger/commit-status-action@main
         with:
-          repo_owner: suzuki-shunsuke
-          repo_name: test-github-action
-          sha: fae4b30052b48f38129f98dfc0bf3bae470eaf01
-          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          github_token: ${{secrets.PERSONAL_GITHUB_TOKEN}}
 
       - run: sleep 20
       - run: exit 1
 
-      - uses: suzuki-shunsuke/update-commit-status-action@main
+      - uses: gha-trigger/commit-status-action@main
         if: always()
         with:
-          repo_owner: suzuki-shunsuke
-          repo_name: test-github-action
-          sha: fae4b30052b48f38129f98dfc0bf3bae470eaf01
-          state: ${{ job.status }}
+          state: ${{job.status}}
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{secrets.PERSONAL_GITHUB_TOKEN}}
 ```
 
 ## Inputs
 
 ### Required
 
-| name       | description      |
-| ---------- | ---------------- |
-| repo_owner | Repository Owner |
-| repo_name  | Repository Name  |
-| sha        | Commit hash      |
+name | description
+--- | ---
+github_token (`$GITHUB_TOKEN`) | GitHub Access Token
 
 ### Optional
 
-- github_token (`${{ github.token }}`): GitHub Access Token
-- context (`${{ github.workflow }} / ${{ github.job }} (${{ github.event_name }})`):
-  - A string label to differentiate this status from the status of other systems. This field is case-insensitive
+- repo_owner (`$GHA_REPOSITORY_OWNER`): Repository Owner
+- repo_name (`$GHA_REPOSITORY_NAME`): Repository Name
+- sha (`$GHA_COMMIT_STATUS_SHA`): Updated commit hash
 - state (`pending`): The state of the status. Can be one of: `error`, `failure`, `pending`, `success`, `cancelled`
-- target_url (`https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`): Target URL
+- context (`${{ github.workflow }} / ${{ github.job }} (${{ github.event_name }})` or `${{ github.workflow }} (${{ github.event_name }})`)
+- target_url (`${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`): Target URL
+- needs: [needs context](https://docs.github.com/en/actions/learn-github-actions/contexts#needs-context)
+- update_commit_status (boolean): If `true`, a commit status is updated
 
 ## Environment variables
 
-- `GITHUB_TOKEN`: GitHub Access Token
+- `GHA_WORKFLOW_COMMIT_STATUS `: `true` or `false`. If `true`, the commit status is updated per workflow, otherwise the commit status is updated per job
 
 ## Outputs
 
