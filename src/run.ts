@@ -96,6 +96,7 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
 
   if (envs.isWorkflow) {
     if (!inputs.updateCommitStatus) {
+      core.info("Skip updating a commit status");
       return;
     }
     if (inputs.needs) {
@@ -111,6 +112,9 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
     throw `state is required`;
   }
 
+  core.info(
+    `Updating a commit status owner=${inputs.repoOwner} repo=${inputs.repoName} sha=${inputs.sha} state=${inputs.state} context=${inputs.context} target_url=${inputs.targetURL}`
+  );
   await octokit.rest.repos.createCommitStatus({
     owner: inputs.repoOwner,
     repo: inputs.repoName,
@@ -122,7 +126,9 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
   });
 };
 
-function getState(state: string): "error" | "failure" | "pending" | "success" | "" {
+function getState(
+  state: string
+): "error" | "failure" | "pending" | "success" | "" {
   switch (state) {
     case "error":
     case "failure":

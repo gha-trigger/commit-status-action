@@ -9644,6 +9644,7 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     }
     if (envs.isWorkflow) {
         if (!inputs.updateCommitStatus) {
+            core.info('Skip updating a commit status');
             return;
         }
         if (inputs.needs) {
@@ -9659,6 +9660,7 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     if (inputs.state == "") {
         throw `state is required`;
     }
+    core.info(`Updating a commit status owner=${inputs.repoOwner} repo=${inputs.repoName} sha=${inputs.sha} state=${inputs.state} context=${inputs.context} target_url=${inputs.targetURL}`);
     yield octokit.rest.repos.createCommitStatus({
         owner: inputs.repoOwner,
         repo: inputs.repoName,
