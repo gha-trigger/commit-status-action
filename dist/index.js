@@ -9671,6 +9671,7 @@ function setState(inputs, envs) {
         return;
     }
     if (!inputs.startWorkflow) {
+        inputs.state = '';
         return;
     }
     if (inputs.state == "") {
