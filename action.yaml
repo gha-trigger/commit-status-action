@@ -29,6 +29,7 @@ inputs:
   update_commit_status:
     description: Whether a commit status is updated
     required: false
+    default: false
 runs:
   using: node16
   main: dist/index.js
