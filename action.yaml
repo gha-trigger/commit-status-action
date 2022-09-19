@@ -1,4 +1,4 @@
-name: update-commit-status-action
+name: commit-status-action
 description: Update commit status according to job results
 inputs:
   repo_owner:
