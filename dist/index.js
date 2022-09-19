@@ -9656,6 +9656,9 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     else {
         inputs.state = getState(inputs.state);
     }
+    if (inputs.state == "") {
+        throw `state is required`;
+    }
     yield octokit.rest.repos.createCommitStatus({
         owner: inputs.repoOwner,
         repo: inputs.repoName,
@@ -9675,6 +9678,8 @@ function getState(state) {
             return state;
         case "cancelled":
             return "failure";
+        case "":
+            return "";
         default:
             throw `state ${state} is invalid`;
     }

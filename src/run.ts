@@ -43,7 +43,7 @@ type Inputs = {
   sha: string;
   context: string;
   githubToken: string;
-  state: "error" | "failure" | "pending" | "success";
+  state: "error" | "failure" | "pending" | "success" | "";
   needs: string;
   targetURL: string;
   updateCommitStatus: boolean;
@@ -107,6 +107,10 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
     inputs.state = getState(inputs.state);
   }
 
+  if (inputs.state == "") {
+    throw `state is required`;
+  }
+
   await octokit.rest.repos.createCommitStatus({
     owner: inputs.repoOwner,
     repo: inputs.repoName,
@@ -118,7 +122,7 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
   });
 };
 
-function getState(state: string): "error" | "failure" | "pending" | "success" {
+function getState(state: string): "error" | "failure" | "pending" | "success" | "" {
   switch (state) {
     case "error":
     case "failure":
@@ -127,6 +131,8 @@ function getState(state: string): "error" | "failure" | "pending" | "success" {
       return state;
     case "cancelled":
       return "failure";
+    case "":
+      return "";
     default:
       throw `state ${state} is invalid`;
   }
