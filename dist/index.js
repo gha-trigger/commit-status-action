@@ -9578,26 +9578,26 @@ const github = __importStar(__nccwpck_require__(8084));
 const core = __importStar(__nccwpck_require__(2900));
 function newEnvs() {
     return {
-        repoOwner: process.env.GHA_REPOSITORY_OWNER || '',
-        repoName: process.env.GHA_REPOSITORY_NAME || '',
-        sha: process.env.GHA_COMMIT_STATUS_SHA || '',
-        githubToken: process.env.GITHUB_TOKEN || '',
+        repoOwner: process.env.GHA_REPOSITORY_OWNER || "",
+        repoName: process.env.GHA_REPOSITORY_NAME || "",
+        sha: process.env.GHA_COMMIT_STATUS_SHA || "",
+        githubToken: process.env.GITHUB_TOKEN || "",
         isWorkflow: process.env.GHA_WORKFLOW_COMMIT_STATUS ? true : false,
-        targetURL: `${process.env.GITHUB_SERVER_URL || 'https://github.com'}/${process.env.GITHUB_REPOSITORY || ''}/actions/runs/${process.env.GITHUB_RUN_ID || ''}`,
+        targetURL: `${process.env.GITHUB_SERVER_URL || "https://github.com"}/${process.env.GITHUB_REPOSITORY || ""}/actions/runs/${process.env.GITHUB_RUN_ID || ""}`,
     };
 }
 exports.newEnvs = newEnvs;
 function newInputs() {
     return {
-        repoOwner: core.getInput('repo_owner'),
-        repoName: core.getInput('repo_name'),
-        sha: core.getInput('sha'),
-        context: core.getInput('context'),
-        githubToken: core.getInput('github_token'),
-        state: getState(core.getInput('state', { required: true })),
-        needs: core.getInput('needs'),
-        updateCommitStatus: core.getBooleanInput('update_commit_status'),
-        targetURL: core.getInput('target_url'),
+        repoOwner: core.getInput("repo_owner"),
+        repoName: core.getInput("repo_name"),
+        sha: core.getInput("sha"),
+        context: core.getInput("context"),
+        githubToken: core.getInput("github_token"),
+        state: getState(core.getInput("state", { required: true })),
+        needs: core.getInput("needs"),
+        updateCommitStatus: core.getBooleanInput("update_commit_status"),
+        targetURL: core.getInput("target_url"),
     };
 }
 exports.newInputs = newInputs;
@@ -9668,13 +9668,13 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
 exports.run = run;
 function getState(state) {
     switch (state) {
-        case 'error':
-        case 'failure':
-        case 'pending':
-        case 'success':
+        case "error":
+        case "failure":
+        case "pending":
+        case "success":
             return state;
-        case 'cancelled':
-            return 'failure';
+        case "cancelled":
+            return "failure";
         default:
             throw `state ${state} is invalid`;
     }
@@ -9688,17 +9688,17 @@ function getStatusFromNeedsContext(needsStr) {
         const result = need.result;
         switch (result) {
             // success, failure, cancelled, or skipped
-            case 'success':
-            case 'skipped':
-            case 'failure':
-                return 'failure';
-            case 'cancelled':
-                return 'failure';
+            case "success":
+            case "skipped":
+            case "failure":
+                return "failure";
+            case "cancelled":
+                return "failure";
             default:
                 throw `result ${result} is invalid`;
         }
     }
-    return 'success';
+    return "success";
 }
 
 
