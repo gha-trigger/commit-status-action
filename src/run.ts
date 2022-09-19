@@ -30,9 +30,9 @@ export function newInputs(): Inputs {
     sha: core.getInput("sha"),
     context: core.getInput("context"),
     githubToken: core.getInput("github_token"),
-    state: getState(core.getInput("state")),
+    state: convState(core.getInput("state")),
     needs: core.getInput("needs"),
-    updateCommitStatus: core.getBooleanInput("update_commit_status"),
+    startWorkflow: core.getBooleanInput("start_workflow"),
     targetURL: core.getInput("target_url"),
   };
 }
@@ -46,7 +46,7 @@ type Inputs = {
   state: "error" | "failure" | "pending" | "success" | "";
   needs: string;
   targetURL: string;
-  updateCommitStatus: boolean;
+  startWorkflow: boolean;
 };
 
 function updateInputsWithEnvs(inputs: Inputs, envs: Envs) {
@@ -94,22 +94,10 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
     inputs.context = `${github.context.workflow} / ${github.context.job} (${github.context.eventName})`;
   }
 
-  if (envs.isWorkflow) {
-    if (!inputs.updateCommitStatus) {
-      core.info("Skip updating a commit status");
-      return;
-    }
-    if (inputs.needs) {
-      inputs.state = getStatusFromNeedsContext(inputs.needs);
-    } else {
-      inputs.state = getState(inputs.state);
-    }
-  } else {
-    inputs.state = getState(inputs.state);
-  }
-
+  setState(inputs, envs);
   if (inputs.state == "") {
-    throw `state is required`;
+    core.info("Skip updating a commit status");
+    return;
   }
 
   core.info(
@@ -126,7 +114,28 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
   });
 };
 
-function getState(
+function setState(inputs: Inputs, envs: Envs) {
+  if (!envs.isWorkflow) {
+    if (inputs.state == "") {
+      throw `state is required`;
+    }
+    inputs.state = convState(inputs.state);
+    return;
+  }
+  if (inputs.needs) {
+    inputs.state = getStatusFromNeedsContext(inputs.needs);
+    return;
+  }
+  if (!inputs.startWorkflow) {
+    return;
+  }
+  if (inputs.state == "") {
+    throw `state is required`;
+  }
+  inputs.state = convState(inputs.state);
+}
+
+function convState(
   state: string
 ): "error" | "failure" | "pending" | "success" | "" {
   switch (state) {
@@ -134,11 +143,10 @@ function getState(
     case "failure":
     case "pending":
     case "success":
+    case "":
       return state;
     case "cancelled":
       return "failure";
-    case "":
-      return "";
     default:
       throw `state ${state} is invalid`;
   }
@@ -160,9 +168,9 @@ function getStatusFromNeedsContext(
     switch (result) {
       // success, failure, cancelled, or skipped
       case "success":
-        return "success";
+        break;
       case "skipped":
-        return "success";
+        break;
       case "failure":
         return "failure";
       case "cancelled":

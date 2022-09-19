@@ -9594,9 +9594,9 @@ function newInputs() {
         sha: core.getInput("sha"),
         context: core.getInput("context"),
         githubToken: core.getInput("github_token"),
-        state: getState(core.getInput("state")),
+        state: convState(core.getInput("state")),
         needs: core.getInput("needs"),
-        updateCommitStatus: core.getBooleanInput("update_commit_status"),
+        startWorkflow: core.getBooleanInput("start_workflow"),
         targetURL: core.getInput("target_url"),
     };
 }
@@ -9642,23 +9642,10 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     else {
         inputs.context = `${github.context.workflow} / ${github.context.job} (${github.context.eventName})`;
     }
-    if (envs.isWorkflow) {
-        if (!inputs.updateCommitStatus) {
-            core.info("Skip updating a commit status");
-            return;
-        }
-        if (inputs.needs) {
-            inputs.state = getStatusFromNeedsContext(inputs.needs);
-        }
-        else {
-            inputs.state = getState(inputs.state);
-        }
-    }
-    else {
-        inputs.state = getState(inputs.state);
-    }
+    setState(inputs, envs);
     if (inputs.state == "") {
-        throw `state is required`;
+        core.info("Skip updating a commit status");
+        return;
     }
     core.info(`Updating a commit status owner=${inputs.repoOwner} repo=${inputs.repoName} sha=${inputs.sha} state=${inputs.state} context=${inputs.context} target_url=${inputs.targetURL}`);
     yield octokit.rest.repos.createCommitStatus({
@@ -9671,17 +9658,36 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.run = run;
-function getState(state) {
+function setState(inputs, envs) {
+    if (!envs.isWorkflow) {
+        if (inputs.state == "") {
+            throw `state is required`;
+        }
+        inputs.state = convState(inputs.state);
+        return;
+    }
+    if (inputs.needs) {
+        inputs.state = getStatusFromNeedsContext(inputs.needs);
+        return;
+    }
+    if (!inputs.startWorkflow) {
+        return;
+    }
+    if (inputs.state == "") {
+        throw `state is required`;
+    }
+    inputs.state = convState(inputs.state);
+}
+function convState(state) {
     switch (state) {
         case "error":
         case "failure":
         case "pending":
         case "success":
+        case "":
             return state;
         case "cancelled":
             return "failure";
-        case "":
-            return "";
         default:
             throw `state ${state} is invalid`;
     }
@@ -9696,9 +9702,9 @@ function getStatusFromNeedsContext(needsStr) {
         switch (result) {
             // success, failure, cancelled, or skipped
             case "success":
-                return "success";
+                break;
             case "skipped":
-                return "success";
+                break;
             case "failure":
                 return "failure";
             case "cancelled":

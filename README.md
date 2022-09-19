@@ -42,7 +42,7 @@ github_token (`$GITHUB_TOKEN`) | GitHub Access Token
 - context (`${{ github.workflow }} / ${{ github.job }} (${{ github.event_name }})` or `${{ github.workflow }} (${{ github.event_name }})`)
 - target_url (`${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`): Target URL
 - needs: [needs context](https://docs.github.com/en/actions/learn-github-actions/contexts#needs-context)
-- update_commit_status (boolean): If `true`, a commit status is updated
+- start_workflow (boolean): Set true if you update the commit status per workflow and you want to update the commit status in this step. You should set true in only one step
 
 ## Environment variables
 

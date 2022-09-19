@@ -26,8 +26,8 @@ inputs:
   needs:
     description: needs context.
     required: false
-  update_commit_status:
-    description: Whether a commit status is updated
+  start_workflow:
+    description: Set true if you update the commit status per workflow and you want to update the commit status in this step. You should set true in only one step.
     required: false
     default: false
 runs:
