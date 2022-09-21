@@ -1,24 +1,15 @@
+---
 name: actionlint
-
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - .github/**
-      - aqua/actionlint.yaml
   push:
-    branches:
-      - main
-    paths:
-      - .github/**
-      - aqua/actionlint.yaml
-
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
-  test:
+  default:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: aquaproj/aqua-installer@v1.1.2
         with:
           aqua_version: v1.19.2
