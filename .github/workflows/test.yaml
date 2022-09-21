@@ -11,6 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          cat << EOS >> "$GITHUB_STEP_SUMMARY"
+          Check commit statuses
+
+          - [Normal](https://github.com/gha-trigger/commit-status-action/commit/ac0a3b503e810cd8b154e85921c68c2e232012af)
+          - [workflow start](https://github.com/gha-trigger/commit-status-action/commit/b8f82e799e56a9fd26068350cc0e919139454b24)
+          - [workflow skip](https://github.com/gha-trigger/commit-status-action/commit/873f3e646708b88a17982adde41f5d3becde0e74)
+          - [workflow end (failure)](https://github.com/gha-trigger/commit-status-action/commit/ec3d99fd7984c4abe29f5dc7da4dac6d95444878)
+          - [workflow end (success)](https://github.com/gha-trigger/commit-status-action/commit/09f6d6cd3ef4d43b4f372badb89a47ab741ec9ca)
+
+          EOS
+
       - name: normal
         uses: ./
         with:
