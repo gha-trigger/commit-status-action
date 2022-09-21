@@ -90,7 +90,7 @@ export const run = async (inputs: Inputs, envs: Envs): Promise<void> => {
   const octokit = github.getOctokit(inputs.githubToken);
 
   if (envs.isWorkflow) {
-    inputs.context = `${github.context.workflow} / (${github.context.eventName})`;
+    inputs.context = `${github.context.workflow} (${github.context.eventName})`;
   } else {
     inputs.context = `${github.context.workflow} / ${github.context.job} (${github.context.eventName})`;
   }
