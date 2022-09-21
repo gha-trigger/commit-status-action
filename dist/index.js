@@ -9638,7 +9638,7 @@ const run = (inputs, envs) => __awaiter(void 0, void 0, void 0, function* () {
     validateInputs(inputs);
     const octokit = github.getOctokit(inputs.githubToken);
     if (envs.isWorkflow) {
-        inputs.context = `${github.context.workflow} / (${github.context.eventName})`;
+        inputs.context = `${github.context.workflow} (${github.context.eventName})`;
     }
     else {
         inputs.context = `${github.context.workflow} / ${github.context.job} (${github.context.eventName})`;
