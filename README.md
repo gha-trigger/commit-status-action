@@ -46,7 +46,7 @@ github_token (`$GITHUB_TOKEN`) | GitHub Access Token
 
 ## Environment variables
 
-- `GHA_WORKFLOW_COMMIT_STATUS `: `true` or `false`. If `true`, the commit status is updated per workflow, otherwise the commit status is updated per job
+- `GHA_WORKFLOW_COMMIT_STATUS`: `true` or `false`. If `true`, the commit status is updated per workflow, otherwise the commit status is updated per job
 
 ## Outputs
 
